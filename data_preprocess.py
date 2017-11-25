@@ -1,10 +1,13 @@
 import csv as csv
 from bs4 import BeautifulSoup
+import time
 def main():
+    start_time = time.time()
     data_preprocess()
+    print (time.time() - start_time), "seconds"
 def data_preprocess():
-    train = csv.reader(open("/home/hpandey/Desktop/sample_train.csv"))
-    wtrain = csv.writer(open("/home/hpandey/Desktop/pre_processed_sample_train.csv",'wb'))
+    train = csv.reader(open("/home/hpandey/Desktop/Train.csv"))
+    wtrain = csv.writer(open("/home/hpandey/Desktop/pre_processed_train.csv",'wb'))
     swords = csv.reader(open("/home/hpandey/Desktop/stop-word-list.csv"))
     row_header = train.next()
     wtrain.writerow(row_header)
