@@ -6,8 +6,8 @@ def main():
     data_preprocess()
     print (time.time() - start_time), "seconds"
 def data_preprocess():
-    train = csv.reader(open("/home/hpandey/Desktop/Train.csv"))
-    wtrain = csv.writer(open("/home/hpandey/Desktop/pre_processed_train.csv",'wb'))
+    train = csv.reader(open("/home/hpandey/Desktop/Test.csv"))
+    wtrain = csv.writer(open("/home/hpandey/Desktop/pre_processed_test.csv",'wb'))
     swords = csv.reader(open("/home/hpandey/Desktop/stop-word-list.csv"))
     row_header = train.next()
     wtrain.writerow(row_header)
@@ -16,6 +16,8 @@ def data_preprocess():
         for word in s:
             stop_words.add(word.strip().lower())
     for line in train:
+        if len(line)==3:
+            wtrain.writerow((int(line[0]),remove_stop_words(line[1],stop_words),remove_stop_words(remove_html_tags(line[2]),stop_words)))
         if len(line)==4:
             wtrain.writerow((int(line[0]),remove_stop_words(line[1],stop_words),remove_stop_words(remove_html_tags(line[2]),stop_words),line[3]))
 
