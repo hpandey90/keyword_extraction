@@ -27,10 +27,10 @@ def main():
     start_time = time.time()
     generate_combinations(2) # generate body and tags combinations
     print (time.time() - start_time), "seconds"
-    print "running test model"
-    start_time = time.time()
-    test_model()
-    print (time.time() - start_time), "seconds"
+    #print "running test model"
+    #start_time = time.time()
+    #test_model()
+    #print (time.time() - start_time), "seconds"
 
 def generate_combinations(idx):
     train_file = "pre_processed_train.csv"
@@ -91,34 +91,6 @@ def compute_unigrams(idx):
                     unigram_count[word]=unigram_count[word]+1
     return unigram_count
         
-def test_model():
-    titles_probabilities = db['temp1']
-    titles_probabilities.create_index([("word", ASCENDING)])
-    body_probabilities = db['temp2']
-    body_probabilities.create_index([("word", ASCENDING)])
-    print 'predicting...'
-    test_file_object = csv.reader(open("/home/hpandey/Desktop/pre_processed_test.csv", 'rb'))
-    header = test_file_object.next()
-    output_file = csv.writer(open("/home/hpandey/Desktop/"+output_filename, "wb"),quoting=csv.QUOTE_NONNUMERIC)
-    output_file.writerow(['Id','Tags'])
-    for row in test_file_object:
-        predicted_tags = []
-        # find tags based on title
-        for word in row[1].lower().split():
-            find_result = titles_probabilities.find({'word':word})#,'score':{'$gte':title_threshold}})
-            for tag_result in find_result:
-                if not tag_result['tag'] in predicted_tags:
-                    predicted_tags.append(tag_result['tag'])
-        # find tags based on body
-        for word in row[2].lower().split():
-            find_result = body_probabilities.find({'word':word})#,'score':{'$gte':body_threshold}})
-            for tag_result in find_result:
-                if tag_result['tag'] not in predicted_tags:
-                    predicted_tags.append(tag_result['tag'])
-        output_file.writerow([int(row[0]),' '.join(predicted_tags)])
-    print 'done'
-
-
 def F1_score(tags,predicted):
     tags = set(tags)
     predicted = set(predicted)
